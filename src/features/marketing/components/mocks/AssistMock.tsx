@@ -15,9 +15,17 @@ export function AssistMock() {
         <span className="mock-frame__dot" />
         <span className="mock-frame__title">wymassist — organization workspace</span>
       </div>
-      <div className="mock-body">
-        <MockKnowledge />
-        <MockConversation />
+      <div className="mock-app">
+        <div className="mock-nav" aria-hidden>
+          <span className="mock-nav__item mock-nav__item--active" />
+          <span className="mock-nav__item" />
+          <span className="mock-nav__item" />
+          <span className="mock-nav__item" />
+        </div>
+        <div className="mock-body">
+          <MockKnowledge />
+          <MockConversation />
+        </div>
       </div>
     </figure>
   );

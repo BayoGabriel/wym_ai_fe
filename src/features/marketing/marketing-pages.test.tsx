@@ -55,9 +55,9 @@ describe('marketing pages', () => {
   it('home explains the product family with CTAs', () => {
     renderPage('/');
     expect(
-      screen.getByRole('heading', { name: /knowledge, answering for your customers/i })
+      screen.getByRole('heading', { name: /answer every customer/i })
     ).toBeInTheDocument();
-    expect(screen.getAllByRole('link', { name: /create your organization/i })[0]).toHaveAttribute(
+    expect(screen.getAllByRole('link', { name: /get started/i })[0]).toHaveAttribute(
       'href',
       '/register'
     );
@@ -68,14 +68,13 @@ describe('marketing pages', () => {
 
   it('products page lists all three products with honest status', () => {
     renderPage('/products');
-    expect(screen.getByText('Available now')).toBeInTheDocument();
-    expect(screen.getAllByText('Planned').length).toBeGreaterThanOrEqual(2);
+    expect(screen.getAllByText('Available now').length).toBeGreaterThanOrEqual(3);
   });
 
   it('product detail renders WymAssist capabilities', () => {
     renderPage('/products/wymassist');
     expect(screen.getByRole('heading', { name: 'WymAssist AI' })).toBeInTheDocument();
-    expect(screen.getByText(/human handoff/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/human handoff/i).length).toBeGreaterThan(0);
   });
 
   it('unknown product slugs render a not-found state', () => {
@@ -105,7 +104,7 @@ describe('marketing pages', () => {
   it('about and use-cases pages render their core content', () => {
     renderPage('/about');
     expect(
-      screen.getByRole('heading', { name: /organizational knowledge useful/i })
+      screen.getByRole('heading', { name: /real work to do/i })
     ).toBeInTheDocument();
     renderPage('/use-cases');
     expect(screen.getByText(/escalating to staff/i)).toBeInTheDocument();

@@ -128,3 +128,33 @@ export async function authRequest<T>(path: string, options: RequestOptions = {})
     }
   }
 }
+
+/** Authenticated file download (CSV exports, generated documents). */
+export async function authDownload(path: string): Promise<Blob> {
+  let tokens = tokenStore.get();
+  if (!tokens) throw new ApiError(401, 'UNAUTHORIZED', 'Not signed in');
+  if (isTokenExpired(tokens.accessToken)) tokens = await refreshTokens();
+
+  const attempt = async (token: string) =>
+    fetch(`${env.VITE_API_BASE_URL}${path}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+  let res = await attempt(tokens.accessToken);
+  if (res.status === 401) {
+    const next = await refreshTokens();
+    res = await attempt(next.accessToken);
+  }
+  if (!res.ok) throw await parseError(res);
+  return res.blob();
+}
+
+/** Trigger a browser file download from a fetched Blob. */
+export function saveBlob(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}

@@ -1,9 +1,28 @@
 import { useParams } from 'react-router-dom';
 import { PageHeader } from '../../../shared/components/PageHeader';
-import { StatusBadge } from '../../../shared/components/StatusBadge';
+import { StatusTag } from '../../assist/components/StatusTag';
+import { ButtonLink } from '../../../shared/components/Button';
 import { LoadingState, ErrorState, EmptyState } from '../../../shared/components/States';
 import { useDocumentTitle } from '../../../shared/utils/useDocumentTitle';
 import { useOrgContext } from '../../organizations/queries/use-org-context';
+
+const PRODUCT_HOME: Record<string, { to: string; label: string; what: string }> = {
+  WYMASSIST: {
+    to: '/dashboard/assist',
+    label: 'Open work queue',
+    what: 'AI assistant for your website — conversations, leads, handoffs and appointments.',
+  },
+  WYMINSIGHT: {
+    to: '/dashboard/insight/datasets',
+    label: 'Open datasets',
+    what: 'Analytics on your business data — upload datasets, generate insight reports.',
+  },
+  WYMFLOW: {
+    to: '/dashboard/flow/tasks',
+    label: 'Open tasks',
+    what: 'Workflow automation — approval tasks, submissions and workflow definitions.',
+  },
+};
 
 export function ProductHomePage() {
   const { code } = useParams();
@@ -16,7 +35,7 @@ export function ProductHomePage() {
 
   if (org.status === 'loading') return <LoadingState label="Loading product…" />;
   if (org.status === 'error') return <ErrorState message={org.message} />;
-  if (!product) {
+  if (!product || !product.active) {
     return (
       <EmptyState
         title="Product not enabled"
@@ -25,20 +44,22 @@ export function ProductHomePage() {
     );
   }
 
+  const home = PRODUCT_HOME[product.code];
   return (
     <>
       <PageHeader
         title={product.name}
-        subtitle={product.description ?? undefined}
-        actions={<StatusBadge status={product.active ? 'active' : 'inactive'} />}
+        subtitle={home?.what ?? product.description ?? undefined}
+        actions={<StatusTag status="ACTIVE" />}
       />
       <div className="card">
-        <h2 style={{ fontSize: 'var(--text-lg)' }}>Workspace coming next</h2>
-        <p className="muted" style={{ marginBottom: 0 }}>
-          The {product.name} management workspace — configuration, conversations, knowledge, and
-          team tools — is delivered in the next implementation phase. Your entitlement is active and
-          this space is reserved for it.
-        </p>
+        {home ? (
+          <ButtonLink to={home.to}>{home.label}</ButtonLink>
+        ) : (
+          <p className="muted" style={{ marginBottom: 0 }}>
+            This product has no workspace yet.
+          </p>
+        )}
       </div>
     </>
   );

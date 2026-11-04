@@ -3,16 +3,20 @@ import { SectionHead } from '../SectionHead';
 
 const FITS = [
   {
-    title: 'Teams drowning in repeat questions',
-    body: 'Support and operations staff answering the same policy, pricing, and process questions every week — the questions your documents already settle.',
+    title: 'Small & medium businesses',
+    body: 'Support customers, understand performance, and organize internal processes — without hiring a dedicated team for each.',
   },
   {
-    title: 'Organizations whose knowledge lives in documents',
-    body: 'Policies, guides, and catalogues that are accurate but unreadable to customers. WymAssist makes them conversational.',
+    title: 'Customer-facing organizations',
+    body: 'Retail, e-commerce, education, healthcare administration, and NGOs — anywhere people ask questions and expect timely, accurate answers.',
   },
   {
-    title: 'Businesses that can’t afford a wrong answer',
-    body: 'When an AI speaks for your organization, it should only say what you approved. Grounding and audit are built in, not bolted on.',
+    title: 'Operations-heavy teams',
+    body: 'Finance approvals, employee onboarding, procurement, document collection — any process that currently runs on follow-ups and forwarded emails.',
+  },
+  {
+    title: 'Larger organizations',
+    body: 'Multi-department tenancy with roles, permissions, audit events, and centrally managed product subscriptions.',
   },
 ];
 
@@ -20,7 +24,7 @@ export function FitSection() {
   return (
     <section className="section section--rule">
       <div className="container">
-        <SectionHead eyebrow="Who it’s for" title="Built for organizations, not demos" />
+        <SectionHead eyebrow="Who it’s for" title="Built for organizations that run on real work" />
         <div className="case-list">
           {FITS.map((f) => (
             <div key={f.title} className="case-row">

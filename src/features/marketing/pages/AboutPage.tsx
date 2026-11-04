@@ -1,30 +1,37 @@
-import { Eyebrow } from '../components/SectionHead';
+import { Eyebrow, SectionHead } from '../components/SectionHead';
 import { FinalCta } from '../components/FinalCta';
+import { Reveal } from '../components/Reveal';
+import { Icon } from '../components/icons';
+import type { IconName } from '../components/icons';
 import { useDocumentTitle } from '../../../shared/utils/useDocumentTitle';
 
-const PRINCIPLES = [
+const PRINCIPLES: { icon: IconName; title: string; body: string }[] = [
   {
+    icon: 'book',
     title: 'Approved knowledge only',
     body: 'An assistant that speaks for an organization should only say what that organization has approved. Grounding in your documents is a design rule, not a feature toggle.',
   },
   {
+    icon: 'handoff',
     title: 'People stay in charge',
     body: 'AI handles the questions it can; a person takes the conversations that need one. Handoff is part of the product, not an apology for it.',
   },
   {
+    icon: 'shield',
     title: 'Honest product status',
-    body: 'We label what is available and what is planned. You should never have to guess which parts of this website describe working software.',
+    body: 'We label what is available and what is on the roadmap. You should never have to guess which parts of this website describe working software.',
   },
   {
+    icon: 'flow',
     title: 'One platform, several jobs',
-    body: 'WymAssist, and the planned WymInsight and WymFlow, share the same organization, permission, and audit foundation — not three disconnected tools.',
+    body: 'WymAssist, WymInsight, and WymFlow share the same organization, permission, and audit foundation — not three disconnected tools.',
   },
 ];
 
 export function AboutPage() {
   useDocumentTitle(
-    'About',
-    'WymNet builds software that makes organizational knowledge useful — starting with WymAssist, an AI assistant grounded in approved knowledge.'
+    'About WymNet — Practical AI for Organizations',
+    'WymNet AI Solutions & Automation builds practical AI software for customer communication, business analytics, and process automation on one platform.'
   );
   return (
     <>
@@ -32,12 +39,12 @@ export function AboutPage() {
         <div className="container">
           <Eyebrow>About WymNet</Eyebrow>
           <h1 className="display display--page">
-            Software that makes organizational knowledge useful
+            Practical AI for organizations that have real work to do
           </h1>
           <p className="lede">
-            Most organizations already own the answers their customers and staff need — they’re just
-            locked inside documents, inboxes, and people’s heads. WymNet builds products that put
-            that knowledge to work.
+            Most business software promises transformation. WymNet focuses on the unglamorous,
+            essential work — answering customers, reading your own data, and moving internal
+            processes — and does it properly.
           </p>
         </div>
       </header>
@@ -45,38 +52,42 @@ export function AboutPage() {
         <div className="container prose">
           <p>
             <strong>WymNet AI Solutions &amp; Automation</strong> is a technology platform for
-            organizational AI, business intelligence, and workflow automation. The first product,
-            WymAssist, is live: it answers visitor questions on your website using the documents
-            your team approves, captures the enquiries worth following up, and hands conversations
-            to staff when a person should take over.
+            customer communication, business intelligence, and workflow automation. It is
+            multi-tenant by design: every client organization gets isolated data, its own staff
+            roles, and its own product subscriptions — so one platform serves many organizations
+            without rebuilding anything for each one.
           </p>
           <p>
-            Two further products are designed on the same foundation: WymInsight, for analytics and
-            reporting over organizational data, and WymFlow, for forms, approvals, and workflow
-            automation. Both are planned — you’ll see them labelled as such wherever they appear on
-            this site, because we don’t present roadmap work as finished software.
+            Three products run on that foundation, and all three are live today.{' '}
+            <strong>WymAssist</strong> answers customer questions from your approved documents,
+            captures leads, takes appointment requests, and hands off to your staff.{' '}
+            <strong>WymInsight</strong> turns uploaded datasets into profiles, trends, forecasts,
+            and reports your leadership can read. <strong>WymFlow</strong> runs forms, approvals,
+            and internal workflows with a full audit trail.
+          </p>
+          <p>
+            We serve small and medium businesses, customer-facing organizations, educational
+            institutions, healthcare administrators, NGOs, and larger enterprises — any
+            organization that would rather have working software than a slogan.
           </p>
         </div>
       </section>
       <section className="section section--white">
         <div className="container">
-          <Eyebrow>How we build</Eyebrow>
-          <h2
-            className="display display--section"
-            style={{ margin: 'var(--space-2) 0 var(--space-6)' }}
-          >
-            Four principles behind the products
-          </h2>
-          <ol className="steps">
-            {PRINCIPLES.map((p) => (
-              <li key={p.title}>
-                <div>
+          <SectionHead eyebrow="How we build" title="Four principles behind the products" />
+          <div className="feature-grid">
+            {PRINCIPLES.map((p, i) => (
+              <Reveal key={p.title} delay={i * 60}>
+                <div className="feature-card">
+                  <span className="icon-chip">
+                    <Icon name={p.icon} size={22} />
+                  </span>
                   <h3>{p.title}</h3>
                   <p>{p.body}</p>
                 </div>
-              </li>
+              </Reveal>
             ))}
-          </ol>
+          </div>
         </div>
       </section>
       <FinalCta />

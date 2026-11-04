@@ -4,6 +4,7 @@ export type Organization = {
   id: string;
   name: string;
   slug: string;
+  publicKey: string | null;
   status: 'pending' | 'active' | 'suspended' | 'archived';
   createdAt: string;
   updatedAt: string;

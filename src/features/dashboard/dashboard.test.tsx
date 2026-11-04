@@ -76,7 +76,9 @@ describe('dashboard shell', () => {
     dashboardFetch();
     renderDashboard('/dashboard');
 
-    expect(await screen.findByText('Acme Corp')).toBeInTheDocument();
+    // The org name appears in the sidebar context box and the page heading.
+    const matches = await screen.findAllByText('Acme Corp');
+    expect(matches.length).toBeGreaterThanOrEqual(2);
     // Entitlement-aware nav: only the active product appears in the sidebar.
     const nav = screen.getByRole('navigation', { name: /application/i });
     expect(nav).toHaveTextContent('WymAssist AI');

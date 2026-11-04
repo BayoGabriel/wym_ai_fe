@@ -13,8 +13,8 @@ export function MarketingFooter() {
             WymNet
           </Link>
           <p className="footer-blurb">
-            Software that makes organizational knowledge useful — for customers, for staff, and for
-            the systems they work in.
+            Practical AI software for customer communication, business intelligence, and process
+            automation — on one secure platform.
           </p>
         </div>
         <nav aria-label="Products">
@@ -40,7 +40,7 @@ export function MarketingFooter() {
       </div>
       <div className="container bottom">
         <span>© {new Date().getFullYear()} WymNet AI Solutions &amp; Automation</span>
-        <span>WymAssist answers are grounded in your approved knowledge.</span>
+        <span>WymAssist · WymInsight · WymFlow — each product stands alone.</span>
       </div>
     </footer>
   );

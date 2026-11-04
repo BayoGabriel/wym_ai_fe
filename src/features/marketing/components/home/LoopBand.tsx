@@ -3,20 +3,20 @@ import '../../styles/mocks.css';
 
 const STAGES = [
   {
-    title: 'Knowledge in',
-    body: 'Your approved documents become the only source the assistant may use.',
+    title: 'Communicate',
+    body: 'WymAssist answers customer questions and captures the enquiries worth following up.',
   },
   {
-    title: 'Question answered',
-    body: 'The visitor gets a specific answer, tied to the source it came from.',
+    title: 'Understand',
+    body: 'WymInsight turns the numbers your business produces into trends, forecasts, and readable reports.',
   },
   {
-    title: 'Enquiry captured',
-    body: 'Contact details and context are recorded as a lead for your team.',
+    title: 'Execute',
+    body: 'WymFlow keeps approvals, requests, and documents moving through defined workflows.',
   },
   {
-    title: 'Human finishes',
-    body: 'Staff see the same thread, reply in place, and close the loop.',
+    title: 'Improve',
+    body: 'Faster answers, clearer numbers, cleaner operations — the gains compound as your team works.',
   },
 ];
 
@@ -25,9 +25,9 @@ export function LoopBand() {
     <section className="section--dark section">
       <div className="container">
         <SectionHead
-          eyebrow="One connected loop"
-          title="Nothing is a dead end — every conversation lands somewhere useful"
-          lede="Most website chats end in a transcript nobody reads. WymAssist turns each one into an answered question, a lead, or a conversation your team owns."
+          eyebrow="One platform, one direction"
+          title="Each product stands alone — together they compound"
+          lede="Subscribe to one product or all three. They share your organization’s accounts, permissions, and audit trail, so every addition builds on what’s already working."
         />
         <div className="flow">
           {STAGES.map((s, i) => (

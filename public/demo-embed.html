@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Greenfield School — WymAssist embed demo</title>
+    <style>
+      body { font-family: Georgia, serif; max-width: 720px; margin: 60px auto; padding: 0 20px; color: #1a2b22; }
+      h1 { color: #0b5c40; }
+      .card { border: 1px solid #d9e4dd; border-radius: 12px; padding: 20px 24px; background: #f7faf8; }
+      code { background: #e8f0ea; padding: 2px 6px; border-radius: 4px; }
+    </style>
+  </head>
+  <body>
+    <h1>Greenfield School</h1>
+    <p>This is a demo client website. The WymAssist widget should appear in the bottom-right corner.</p>
+    <div class="card">
+      <h2>Admissions open for 2027</h2>
+      <p>Nursing · IT · Business Administration. Ask the assistant about fees, registration dates, or book a campus tour — try the buttons inside the chat.</p>
+      <p>Embed snippet used on this page: <code>data-org="greenfield-school"</code></p>
+    </div>
+    <script src="http://localhost:3000/widget/wymassist.js"
+      data-org="greenfield-school"
+      data-api="http://localhost:3000"
+      async></script>
+  </body>
+</html>

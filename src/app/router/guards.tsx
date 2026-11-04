@@ -16,6 +16,14 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
+export function RequirePlatform({ children }: { children: ReactNode }) {
+  const { user } = useAuth();
+  if (!user?.platformAccess) {
+    return <Navigate to="/dashboard" replace />;
+  }
+  return <>{children}</>;
+}
+
 export function RedirectIfAuthed({ children }: { children: ReactNode }) {
   const { state } = useAuth();
   const location = useLocation();

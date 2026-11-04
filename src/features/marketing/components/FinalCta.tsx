@@ -1,8 +1,8 @@
 import { ButtonLink } from '../../../shared/components/Button';
 
 export function FinalCta({
-  title = 'Put your organization’s knowledge to work.',
-  body = 'Create your workspace, approve your sources, and start answering customer questions with WymAssist.',
+  title = 'Make your organization easier to reach, understand, and run.',
+  body = 'Create a workspace, enable the products you need, and see what a working week looks like on WymNet.',
 }: {
   title?: string;
   body?: string;
@@ -14,10 +14,10 @@ export function FinalCta({
         <p>{body}</p>
         <div className="cta-row">
           <ButtonLink to="/register" size="lg">
-            Create your organization
+            Get started
           </ButtonLink>
           <ButtonLink to="/contact" variant="secondary" size="lg">
-            Talk to us first
+            Discuss your business needs
           </ButtonLink>
         </div>
       </div>

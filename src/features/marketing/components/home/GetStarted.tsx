@@ -4,15 +4,15 @@ import { SectionHead } from '../SectionHead';
 const STEPS = [
   {
     title: 'Create your organization',
-    body: 'One registration creates your workspace and administrator account — no separate onboarding flow.',
+    body: 'One registration creates your workspace and administrator account — no separate onboarding flow, no payment details.',
   },
   {
-    title: 'Load your approved knowledge',
-    body: 'Upload the documents your assistant should answer from, and review what it may use.',
+    title: 'Pick a product and load it',
+    body: 'Documents for WymAssist, a spreadsheet for WymInsight, or a process definition for WymFlow — each starts from material you already have.',
   },
   {
-    title: 'Put it on your website',
-    body: 'Connect WymAssist to your site through the public chat API. An embeddable widget is on the way.',
+    title: 'Put it to work',
+    body: 'Embed the chat widget, read your first report, or run your first workflow — then add products when you’re ready for more.',
   },
 ];
 
@@ -20,7 +20,7 @@ export function GetStarted() {
   return (
     <section className="section section--white">
       <div className="container">
-        <SectionHead eyebrow="Getting started" title="From registration to a working assistant" />
+        <SectionHead eyebrow="Getting started" title="Three steps, no implementation project" />
         <ol className="steps">
           {STEPS.map((s) => (
             <li key={s.title}>
@@ -33,7 +33,7 @@ export function GetStarted() {
         </ol>
         <div className="cta-row">
           <ButtonLink to="/register" size="lg">
-            Create your organization
+            Get started
           </ButtonLink>
         </div>
       </div>

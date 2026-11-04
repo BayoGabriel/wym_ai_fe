@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { Eyebrow } from './SectionHead';
 import '../styles/mocks.css';
 
@@ -6,13 +5,13 @@ export function ProductRoadmap({ name, items }: { name: string; items: string[] 
   return (
     <section className="section--dark section">
       <div className="container">
-        <Eyebrow>Planned scope</Eyebrow>
+        <Eyebrow>On the roadmap</Eyebrow>
         <h2 className="display display--section" style={{ marginTop: 'var(--space-2)' }}>
-          Where {name} is headed
+          Where {name} goes next
         </h2>
         <p className="lede" style={{ color: 'var(--color-dark-text-muted)', maxWidth: '60ch' }}>
-          These capabilities are designed and documented, and will build on the same organization,
-          permission, and audit foundation as WymAssist. They are not available for use yet.
+          The product works today. These are the next integrations and capabilities on the same
+          organization, permission, and audit foundation.
         </p>
         <div className="flow">
           {items.map((r, i) => (
@@ -22,12 +21,6 @@ export function ProductRoadmap({ name, items }: { name: string; items: string[] 
             </div>
           ))}
         </div>
-        <p style={{ color: 'var(--color-dark-text-muted)', fontSize: 'var(--text-sm)' }}>
-          <Link to="/contact" style={{ color: 'var(--color-accent)' }}>
-            Contact us
-          </Link>{' '}
-          to hear when this product is available.
-        </p>
       </div>
     </section>
   );

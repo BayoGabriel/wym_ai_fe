@@ -1,0 +1,121 @@
+import { useState } from 'react';
+import type { FormEvent } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { assistApi } from '../api/assist-api';
+import type { AssistantConfig } from '../api/assist-api';
+import { assistKeys, assistQueries } from '../queries';
+import { Button } from '../../../shared/components/Button';
+import { TextField } from '../../../shared/components/TextField';
+import { Alert } from '../../../shared/components/Alert';
+import { LoadingState } from '../../../shared/components/States';
+
+const FLAGS: { key: keyof AssistantConfig; label: string }[] = [
+  { key: 'publicChatEnabled', label: 'Public website chat' },
+  { key: 'leadCaptureEnabled', label: 'Lead capture' },
+  { key: 'escalationEnabled', label: 'Human escalation' },
+  { key: 'appointmentRequestsEnabled', label: 'Appointment requests' },
+  { key: 'notifyOnLead', label: 'Notify on new lead' },
+  { key: 'notifyOnHandoff', label: 'Notify on handoff request' },
+  { key: 'notifyOnAppointment', label: 'Notify on appointment request' },
+];
+
+export function AssistantConfigForm() {
+  const query = useQuery(assistQueries.config);
+  if (query.isPending) return <LoadingState label="Loading configuration…" />;
+  return <ConfigFormInner initial={query.data ?? {}} />;
+}
+
+function ConfigFormInner({ initial }: { initial: AssistantConfig }) {
+  const queryClient = useQueryClient();
+  const [form, setForm] = useState<AssistantConfig>(initial);
+  const [origins, setOrigins] = useState((initial.allowedOrigins ?? []).join('\n'));
+
+  const save = useMutation({
+    mutationFn: () =>
+      assistApi.patchAssistantConfig({
+        ...form,
+        allowedOrigins: origins
+          .split('\n')
+          .map((o) => o.trim())
+          .filter(Boolean),
+      }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: assistKeys.config }),
+  });
+
+  return (
+    <form
+      className="card"
+      onSubmit={(e: FormEvent) => {
+        e.preventDefault();
+        save.mutate();
+      }}
+    >
+      <h2 className="section-title">Assistant configuration</h2>
+      {save.isError && <Alert kind="error">{save.error.message}</Alert>}
+      {save.isSuccess && <Alert kind="success">Saved.</Alert>}
+      <div className="form-grid">
+        <TextField
+          label="Assistant name"
+          value={form.assistantName ?? ''}
+          onChange={(e) => setForm({ ...form, assistantName: e.target.value })}
+        />
+        <TextField
+          label="Tone"
+          value={form.tone ?? ''}
+          onChange={(e) => setForm({ ...form, tone: e.target.value })}
+          placeholder="friendly, professional…"
+        />
+        <TextField
+          label="Operating hours"
+          value={form.operatingHours ?? ''}
+          onChange={(e) => setForm({ ...form, operatingHours: e.target.value })}
+          placeholder="Mon–Fri 09:00–17:00"
+        />
+        <TextField
+          label="Notification email"
+          type="email"
+          value={form.notificationEmail ?? ''}
+          onChange={(e) => setForm({ ...form, notificationEmail: e.target.value })}
+          hint="Additional mailbox for alerts — all team members are always notified too"
+        />
+      </div>
+      <label className="field">
+        <span className="field__label">Welcome message</span>
+        <textarea
+          className="input"
+          rows={2}
+          value={form.welcomeMessage ?? ''}
+          onChange={(e) => setForm({ ...form, welcomeMessage: e.target.value })}
+        />
+      </label>
+      <label className="field">
+        <span className="field__label">Allowed origins (one per line)</span>
+        <textarea
+          className="input"
+          rows={3}
+          placeholder="https://example.com"
+          value={origins}
+          onChange={(e) => setOrigins(e.target.value)}
+        />
+        <span className="field__hint">
+          Only these websites may embed the assistant. Leave empty to allow any.
+        </span>
+      </label>
+      <div className="form-grid">
+        {FLAGS.map(({ key, label }) => (
+          <label key={key} style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'center' }}>
+            <input
+              type="checkbox"
+              checked={!!form[key]}
+              onChange={(e) => setForm({ ...form, [key]: e.target.checked })}
+            />
+            {label}
+          </label>
+        ))}
+      </div>
+      <Button type="submit" loading={save.isPending} style={{ marginTop: 'var(--space-4)' }}>
+        Save configuration
+      </Button>
+    </form>
+  );
+}

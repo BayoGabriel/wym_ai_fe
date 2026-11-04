@@ -1,34 +1,47 @@
 import { HomeHero } from '../components/home/HomeHero';
+import { CapabilityStrip } from '../components/home/CapabilityStrip';
 import { HowItWorks } from '../components/home/HowItWorks';
+import { FeatureGrid } from '../components/home/FeatureGrid';
 import { LoopBand } from '../components/home/LoopBand';
+import { PlatformStats } from '../components/home/PlatformStats';
 import { FitSection } from '../components/home/FitSection';
+import { FaqSection } from '../components/home/FaqSection';
 import { GetStarted } from '../components/home/GetStarted';
-import { ProductLines } from '../components/ProductLines';
+import { ProductCards } from '../components/ProductCards';
 import { FinalCta } from '../components/FinalCta';
 import { SectionHead } from '../components/SectionHead';
+import { Reveal } from '../components/Reveal';
 import { useDocumentTitle } from '../../../shared/utils/useDocumentTitle';
 
 export function HomePage() {
   useDocumentTitle(
-    'Organizational AI, business intelligence & automation',
-    'WymNet builds organizational AI. WymAssist answers customer questions from your approved knowledge, captures leads, and hands off to your team.'
+    'AI Customer Support, Business Intelligence & Process Automation',
+    'WymNet AI Solutions & Automation builds practical AI software: WymAssist for customer conversations, WymInsight for data analytics, and WymFlow for process automation.'
   );
   return (
     <>
       <HomeHero />
-      <HowItWorks />
-      <LoopBand />
+      <CapabilityStrip />
       <section className="section">
         <div className="container">
-          <SectionHead
-            eyebrow="The product family"
-            title="One platform, three jobs"
-            lede="WymAssist is available today. WymInsight and WymFlow are the intelligence and automation directions of the same platform — clearly marked as planned until they ship."
-          />
-          <ProductLines />
+          <Reveal>
+            <SectionHead
+              eyebrow="The product family"
+              title="Three products for three jobs every organization has"
+              lede="WymAssist handles customer conversations. WymInsight turns your data into decisions. WymFlow keeps internal processes moving. Each is a standalone product — subscribe to what you need, nothing else."
+            />
+          </Reveal>
+          <Reveal delay={80}>
+            <ProductCards />
+          </Reveal>
         </div>
       </section>
+      <FeatureGrid />
+      <LoopBand />
+      <HowItWorks />
+      <PlatformStats />
       <FitSection />
+      <FaqSection />
       <GetStarted />
       <FinalCta />
     </>

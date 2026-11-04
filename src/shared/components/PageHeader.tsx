@@ -10,28 +10,12 @@ export function PageHeader({
   actions?: ReactNode;
 }) {
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        gap: 'var(--space-4)',
-        flexWrap: 'wrap',
-        marginBottom: 'var(--space-6)',
-      }}
-    >
+    <div className="page-head">
       <div>
-        <h1
-          style={{
-            fontSize: 'var(--text-2xl)',
-            marginBottom: 'var(--space-1)',
-          }}
-        >
-          {title}
-        </h1>
-        {subtitle && <p className="muted">{subtitle}</p>}
+        <h1>{title}</h1>
+        {subtitle && <p className="page-sub">{subtitle}</p>}
       </div>
-      {actions}
+      {actions && <div className="page-actions">{actions}</div>}
     </div>
   );
 }
