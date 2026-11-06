@@ -60,6 +60,7 @@ export const adminApi = {
     organizationId: string;
     productCode: string;
     status?: string;
+    startAt?: string;
     endAt?: string | null;
   }) => authRequest<Subscription>('/api/v1/admin/subscriptions', { method: 'POST', body }),
   updateSubscription: (id: string, body: { status?: string; endAt?: string | null }) =>

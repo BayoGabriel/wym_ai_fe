@@ -10,9 +10,7 @@ export function AuthLayout() {
           className="brand"
           style={{ justifyContent: 'center', marginBottom: 'var(--space-5)' }}
         >
-          <span className="logo-mark" aria-hidden>
-            W
-          </span>
+          <img className="brand-mark" src="/brand/wymnet-logo.png" alt="" aria-hidden />
           WymNet
         </Link>
         <Outlet />

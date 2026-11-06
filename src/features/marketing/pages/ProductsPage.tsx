@@ -40,7 +40,7 @@ export function ProductsPage() {
         <div className="container">
           <Eyebrow>Product family</Eyebrow>
           <h1 className="display display--page">
-            Three products, three jobs, <span className="grad-text">one platform</span>
+            Three products, three jobs, <span className="em-accent">one platform</span>
           </h1>
           <p className="lede">
             WymAssist handles customer communication. WymInsight turns business data into decisions.

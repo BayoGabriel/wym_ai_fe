@@ -77,11 +77,16 @@ export function listMessages(apiBase: string, token: string) {
   return request<{ items: ChatMessage[] }>(apiBase, '/messages?limit=100', { token });
 }
 
-export function sendMessage(apiBase: string, token: string, content: string) {
+export function sendMessage(
+  apiBase: string,
+  token: string,
+  content: string,
+  clientRequestId: string = crypto.randomUUID()
+) {
   return request<{ userMessage: ChatMessage; assistantMessage: ChatMessage | null }>(
     apiBase,
     '/messages',
-    { method: 'POST', token, body: { content, clientRequestId: crypto.randomUUID() } }
+    { method: 'POST', token, body: { content, clientRequestId } }
   );
 }
 

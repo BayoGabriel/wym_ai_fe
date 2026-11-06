@@ -49,27 +49,39 @@ export function AboutPage() {
         </div>
       </header>
       <section className="section">
-        <div className="container prose">
-          <p>
-            <strong>WymNet AI Solutions &amp; Automation</strong> is a technology platform for
-            customer communication, business intelligence, and workflow automation. It is
-            multi-tenant by design: every client organization gets isolated data, its own staff
-            roles, and its own product subscriptions — so one platform serves many organizations
-            without rebuilding anything for each one.
-          </p>
-          <p>
-            Three products run on that foundation, and all three are live today.{' '}
-            <strong>WymAssist</strong> answers customer questions from your approved documents,
-            captures leads, takes appointment requests, and hands off to your staff.{' '}
-            <strong>WymInsight</strong> turns uploaded datasets into profiles, trends, forecasts,
-            and reports your leadership can read. <strong>WymFlow</strong> runs forms, approvals,
-            and internal workflows with a full audit trail.
-          </p>
-          <p>
-            We serve small and medium businesses, customer-facing organizations, educational
-            institutions, healthcare administrators, NGOs, and larger enterprises — any
-            organization that would rather have working software than a slogan.
-          </p>
+        <div className="container about-intro">
+          <div className="prose">
+            <p>
+              <strong>WymNet AI Solutions &amp; Automation</strong> is a technology platform for
+              customer communication, business intelligence, and workflow automation. It is
+              multi-tenant by design: every client organization gets isolated data, its own staff
+              roles, and its own product subscriptions — so one platform serves many organizations
+              without rebuilding anything for each one.
+            </p>
+            <p>
+              Three products run on that foundation, and all three are live today.{' '}
+              <strong>WymAssist</strong> answers customer questions from your approved documents,
+              captures leads, takes appointment requests, and hands off to your staff.{' '}
+              <strong>WymInsight</strong> turns uploaded datasets into profiles, trends, forecasts,
+              and reports your leadership can read. <strong>WymFlow</strong> runs forms, approvals,
+              and internal workflows with a full audit trail.
+            </p>
+            <p>
+              We serve small and medium businesses, customer-facing organizations, educational
+              institutions, healthcare administrators, NGOs, and larger enterprises — any
+              organization that would rather have working software than a slogan.
+            </p>
+          </div>
+          <Reveal delay={80}>
+            <figure className="frame frame--tall">
+              <img
+                src="/images/about-team.webp"
+                alt="Two colleagues working together at a laptop in an office library"
+                loading="lazy"
+              />
+              <figcaption>Built for the people doing the work</figcaption>
+            </figure>
+          </Reveal>
         </div>
       </section>
       <section className="section section--white">

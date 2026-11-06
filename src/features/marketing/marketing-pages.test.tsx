@@ -112,7 +112,9 @@ describe('marketing pages', () => {
 
   it('not-found route renders a helpful 404', () => {
     renderPage('/some-missing-page');
-    expect(screen.getByRole('heading', { name: /this page doesn’t exist/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /this page drifted out of orbit/i })
+    ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /back to home/i })).toHaveAttribute('href', '/');
   });
 });

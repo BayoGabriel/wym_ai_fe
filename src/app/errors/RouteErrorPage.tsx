@@ -1,4 +1,4 @@
-import { isRouteErrorResponse, useRouteError } from 'react-router-dom';
+import { isRouteErrorResponse, Link, useRouteError } from 'react-router-dom';
 import { ButtonLink } from '../../shared/components/Button';
 import { useDocumentTitle } from '../../shared/utils/useDocumentTitle';
 
@@ -16,11 +16,20 @@ export function RouteErrorPage() {
     : 'An unexpected error occurred while loading this page.';
 
   return (
-    <div className="container">
-      <div className="state-box" role="alert" style={{ padding: 'var(--space-12)' }}>
+    <div className="errorpage">
+      <div className="errorpage__card" role="alert">
+        <Link to="/" className="errorpage__brand">
+          <img src="/brand/wymnet-logo.png" alt="" aria-hidden />
+          WymNet
+        </Link>
         <h1>{title}</h1>
         <p className="muted">{message}</p>
-        <ButtonLink to="/">Back to home</ButtonLink>
+        <div className="errorpage__actions">
+          <ButtonLink to="/">Back to home</ButtonLink>
+          <ButtonLink to="/contact" variant="secondary">
+            Contact us
+          </ButtonLink>
+        </div>
       </div>
     </div>
   );

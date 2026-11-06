@@ -65,9 +65,7 @@ export function DashboardSidebar({ open, onClose }: { open?: boolean; onClose?: 
   return (
     <aside className={`app-sidebar${open ? ' open' : ''}`} aria-label="Application navigation">
       <div className="brand">
-        <span className="logo-mark" aria-hidden>
-          W
-        </span>
+        <img className="brand-mark" src="/brand/wymnet-logo.png" alt="" aria-hidden />
         WymNet
       </div>
       <OrgContextBox />

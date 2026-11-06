@@ -10,6 +10,21 @@ import { useDocumentTitle } from '../../../shared/utils/useDocumentTitle';
 const CASE_ICONS: IconName[] = ['book', 'chat', 'lead', 'handoff', 'doc', 'chart'];
 const GROUP_ICON: IconName[] = ['chat', 'chart', 'flow'];
 
+const GROUP_IMG: Record<string, { src: string; alt: string }> = {
+  wymassist: {
+    src: '/images/uc-assist.jpg',
+    alt: 'A customer support specialist wearing a headset',
+  },
+  wyminsight: {
+    src: '/images/uc-insight.jpg',
+    alt: 'An analyst reviewing printed charts',
+  },
+  wymflow: {
+    src: '/images/uc-flow.jpg',
+    alt: 'A staff member reviewing and signing documents',
+  },
+};
+
 export function UseCasesPage() {
   useDocumentTitle(
     'Use Cases — AI Customer Support, Analytics & Automation',
@@ -30,9 +45,16 @@ export function UseCasesPage() {
       {USE_CASE_GROUPS.map((g, gi) => (
         <section key={g.slug} className={`section${gi % 2 === 1 ? ' section--white' : ''}`}>
           <div className="container">
-            <Eyebrow>
-              {g.product} — {g.tagline}
-            </Eyebrow>
+            <div className="case-group-head">
+              <Eyebrow>
+                {g.product} — {g.tagline}
+              </Eyebrow>
+              {GROUP_IMG[g.slug] && (
+                <figure className="frame">
+                  <img src={GROUP_IMG[g.slug].src} alt={GROUP_IMG[g.slug].alt} loading="lazy" />
+                </figure>
+              )}
+            </div>
             <div className="case-cards" style={{ marginTop: 'var(--space-4)' }}>
               {g.cases.map((c, i) => (
                 <Reveal key={c.title} delay={i * 60}>

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { SectionHead } from '../SectionHead';
+import { Reveal } from '../Reveal';
 
 const FITS = [
   {
@@ -23,19 +24,34 @@ const FITS = [
 export function FitSection() {
   return (
     <section className="section section--rule">
-      <div className="container">
-        <SectionHead eyebrow="Who it’s for" title="Built for organizations that run on real work" />
-        <div className="case-list">
-          {FITS.map((f) => (
-            <div key={f.title} className="case-row">
-              <h3>{f.title}</h3>
-              <p>{f.body}</p>
-            </div>
-          ))}
+      <div className="container fit-grid">
+        <Reveal>
+          <figure className="frame frame--tall">
+            <img
+              src="/images/fit-workshop.jpg"
+              alt="A tailor at work in his shop, sewing fabric at his machine"
+              loading="lazy"
+            />
+            <figcaption>The organizations WymNet is built for</figcaption>
+          </figure>
+        </Reveal>
+        <div>
+          <SectionHead
+            eyebrow="Who it’s for"
+            title="Built for organizations that run on real work"
+          />
+          <div className="case-list case-list--compact">
+            {FITS.map((f) => (
+              <div key={f.title} className="case-row">
+                <h3>{f.title}</h3>
+                <p>{f.body}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ marginTop: 'var(--space-6)' }}>
+            <Link to="/use-cases">See the use cases in detail →</Link>
+          </p>
         </div>
-        <p style={{ marginTop: 'var(--space-6)' }}>
-          <Link to="/use-cases">See the use cases in detail →</Link>
-        </p>
       </div>
     </section>
   );

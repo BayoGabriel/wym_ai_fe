@@ -46,6 +46,14 @@ export function ContactPage() {
                     Create an organization
                   </ButtonLink>
                 </div>
+                <figure className="frame" style={{ marginTop: 'var(--space-6)' }}>
+                  <img
+                    src="/images/contact-person.jpg"
+                    alt="A member of the WymNet team wearing a headset"
+                    loading="lazy"
+                  />
+                  <figcaption>You’re writing to a person</figcaption>
+                </figure>
               </div>
             </Reveal>
             <Reveal delay={100}>

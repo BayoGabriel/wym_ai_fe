@@ -6,6 +6,8 @@ import type { OrgSettings } from '../api/assist-api';
 import { assistKeys, assistQueries } from '../queries';
 import { Button } from '../../../shared/components/Button';
 import { TextField } from '../../../shared/components/TextField';
+import { PresetSelectField } from '../../../shared/components/PresetSelectField';
+import { BUSINESS_CATEGORY_OPTIONS } from '../data/presets';
 import { Alert } from '../../../shared/components/Alert';
 import { LoadingState } from '../../../shared/components/States';
 
@@ -44,11 +46,12 @@ function BrandingFormInner({ initial }: { initial: OrgSettings }) {
           value={form.businessName ?? ''}
           onChange={set('businessName')}
         />
-        <TextField
+        <PresetSelectField
           label="Business category"
           value={form.businessCategory ?? ''}
-          onChange={set('businessCategory')}
-          placeholder="School, clinic, retail…"
+          options={BUSINESS_CATEGORY_OPTIONS}
+          onChange={(v) => setForm({ ...form, businessCategory: v })}
+          customPlaceholder="e.g. Logistics company"
         />
         <TextField label="Website" value={form.website ?? ''} onChange={set('website')} />
         <TextField

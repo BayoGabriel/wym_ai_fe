@@ -7,9 +7,7 @@ export function MarketingFooter() {
       <div className="container footer-grid">
         <div>
           <Link to="/" className="brand">
-            <span className="logo-mark" aria-hidden>
-              W
-            </span>
+            <img className="brand-mark" src="/brand/wymnet-logo.png" alt="" aria-hidden />
             WymNet
           </Link>
           <p className="footer-blurb">

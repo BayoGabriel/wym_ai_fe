@@ -10,10 +10,10 @@ export function HomeHero() {
       <section className="hero container">
         <div className="hero-copy">
           <Reveal>
-            <span className="pill">WymNet AI Solutions &amp; Automation</span>
+            <span className="spec-tag">WymNet AI Solutions &amp; Automation</span>
             <h1 className="display display--hero" style={{ marginTop: 'var(--space-5)' }}>
               Answer every customer. Understand your numbers.{' '}
-              <span className="grad-text">Automate the busywork.</span>
+              <span className="em-accent">Automate the busywork.</span>
             </h1>
             <p className="lede">
               WymNet builds practical AI software for organizations that deal with customers, data,

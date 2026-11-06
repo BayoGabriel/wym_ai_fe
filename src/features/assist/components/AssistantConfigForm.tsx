@@ -6,6 +6,8 @@ import type { AssistantConfig } from '../api/assist-api';
 import { assistKeys, assistQueries } from '../queries';
 import { Button } from '../../../shared/components/Button';
 import { TextField } from '../../../shared/components/TextField';
+import { PresetSelectField } from '../../../shared/components/PresetSelectField';
+import { OPERATING_HOURS_OPTIONS, TONE_OPTIONS } from '../data/presets';
 import { Alert } from '../../../shared/components/Alert';
 import { LoadingState } from '../../../shared/components/States';
 
@@ -59,17 +61,20 @@ function ConfigFormInner({ initial }: { initial: AssistantConfig }) {
           value={form.assistantName ?? ''}
           onChange={(e) => setForm({ ...form, assistantName: e.target.value })}
         />
-        <TextField
-          label="Tone"
+        <PresetSelectField
+          label="Chatbot personality"
           value={form.tone ?? ''}
-          onChange={(e) => setForm({ ...form, tone: e.target.value })}
-          placeholder="friendly, professional…"
+          options={TONE_OPTIONS}
+          onChange={(tone) => setForm({ ...form, tone })}
+          customPlaceholder="e.g. warm and witty"
+          hint="Sets the assistant's tone of voice — pick a preset or choose Custom…"
         />
-        <TextField
+        <PresetSelectField
           label="Operating hours"
           value={form.operatingHours ?? ''}
-          onChange={(e) => setForm({ ...form, operatingHours: e.target.value })}
-          placeholder="Mon–Fri 09:00–17:00"
+          options={OPERATING_HOURS_OPTIONS}
+          onChange={(operatingHours) => setForm({ ...form, operatingHours })}
+          customPlaceholder="e.g. Mon–Fri 09:00–17:00"
         />
         <TextField
           label="Notification email"

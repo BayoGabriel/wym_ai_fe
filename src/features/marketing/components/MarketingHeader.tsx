@@ -18,9 +18,7 @@ export function MarketingHeader() {
     <header className="site-header">
       <div className="container">
         <Link to="/" className="brand" onClick={close}>
-          <span className="logo-mark" aria-hidden>
-            W
-          </span>
+          <img className="brand-mark" src="/brand/wymnet-logo.png" alt="" aria-hidden />
           WymNet
         </Link>
         <nav className="nav-desktop" aria-label="Primary">
