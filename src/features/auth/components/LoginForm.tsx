@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Button } from '../../../shared/components/Button';
 import { TextField } from '../../../shared/components/TextField';
 import { Alert } from '../../../shared/components/Alert';
@@ -66,6 +66,9 @@ export function LoginForm() {
       <Button type="submit" loading={busy} style={{ width: '100%' }}>
         Sign in
       </Button>
+      <p className="small muted" style={{ marginTop: 'var(--space-3)', marginBottom: 0 }}>
+        <Link to="/forgot-password">Forgot your password?</Link>
+      </p>
     </form>
   );
 }

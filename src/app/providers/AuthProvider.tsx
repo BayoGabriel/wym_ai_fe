@@ -7,9 +7,15 @@ import { fetchCurrentUser, login, logout, register } from '../../features/auth/s
 import type { LoginInput, RegisterInput } from '../../features/auth/services/auth-api';
 import type { AuthState } from '../../features/auth/types/auth';
 import { AuthContext, type AuthContextValue } from './auth-context';
+import { initUserPrefs } from '../../shared/prefs/prefs';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AuthState>({ status: 'initializing' });
+
+  // Per-user UI prefs layer over device prefs once the session resolves.
+  useEffect(() => {
+    initUserPrefs(state.status === 'authenticated' ? state.user.id : null);
+  }, [state]);
 
   const expire = useCallback(() => {
     tokenStore.clear();

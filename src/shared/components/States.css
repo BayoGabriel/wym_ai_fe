@@ -1,0 +1,32 @@
+/* States — keeps .state-box layout owned by dashboard.css; adds icon chrome */
+.state-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-lg);
+  background: var(--tenant-accent-soft);
+  color: var(--tenant-accent);
+  margin-bottom: var(--space-2);
+}
+.state-icon .lucide {
+  width: 20px;
+  height: 20px;
+}
+.state-icon--error {
+  background: var(--color-danger-subtle);
+  color: var(--color-danger);
+  font-weight: 800;
+  font-size: 18px;
+}
+.state-box--compact {
+  padding: var(--space-5) var(--space-4);
+}
+.state-box--compact .state-icon {
+  width: 34px;
+  height: 34px;
+  margin-bottom: 4px;
+}
+.state-box--compact h3 {
+  font-size: var(--text-sm);
+}

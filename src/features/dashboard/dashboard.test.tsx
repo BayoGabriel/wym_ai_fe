@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import { renderRoutes, makeToken, mockJsonResponse } from '../../test/helpers';
 import { tokenStore } from '../../shared/auth/token-store';
 import { RequireAuth } from '../../app/router/guards';
-import { DashboardLayout } from '../../app/layouts/DashboardLayout';
+import { AppShell } from '../../app/shell/AppShell';
 import { OverviewPage } from './pages/OverviewPage';
 import { ProductHomePage } from './pages/ProductHomePage';
 
@@ -57,7 +57,7 @@ function renderDashboard(initial: string) {
         element: (
           <RequireAuth>
             <Routes>
-              <Route element={<DashboardLayout />}>
+              <Route element={<AppShell />}>
                 <Route path="/dashboard" element={<OverviewPage />} />
                 <Route path="/dashboard/products/:code" element={<ProductHomePage />} />
               </Route>
@@ -76,15 +76,15 @@ describe('dashboard shell', () => {
     dashboardFetch();
     renderDashboard('/dashboard');
 
-    // The org name appears in the sidebar context box and the page heading.
-    const matches = await screen.findAllByText('Acme Corp');
+    // The org name appears in the sidebar context box and the overview subhead.
+    const matches = await screen.findAllByText(/Acme Corp/);
     expect(matches.length).toBeGreaterThanOrEqual(2);
-    // Entitlement-aware nav: only the active product appears in the sidebar.
+    // Entitlement-aware nav: only the active product's section appears.
     const nav = screen.getByRole('navigation', { name: /application/i });
-    expect(nav).toHaveTextContent('WymAssist AI');
+    expect(nav).toHaveTextContent('WymAssist');
     expect(nav).not.toHaveTextContent('WymInsight');
-    // The overview still shows the full entitlement list with status.
-    expect(screen.getAllByText('inactive').length).toBeGreaterThan(0);
+    // The org context box reflects the enabled-product count.
+    expect(screen.getByText('1 product enabled')).toBeInTheDocument();
   });
 
   it('product home shows the entitlement details for an enabled product', async () => {

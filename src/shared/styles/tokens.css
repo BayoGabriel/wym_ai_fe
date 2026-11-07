@@ -1,4 +1,12 @@
+/* ==========================================================================
+   WymNet design tokens — single source for light & dark themes, density,
+   tenant accent, charts, motion and elevation.
+   Marketing site and dashboard both read from here.
+   ========================================================================== */
+
 :root {
+  color-scheme: light;
+
   /* Color — warm paper, green ink, deep forest accents */
   --color-bg: #faf9f5;
   --color-bg-subtle: #f1efe8;
@@ -21,16 +29,41 @@
 
   --color-danger: #b3352b;
   --color-danger-subtle: #fbe9e6;
+  --color-danger-border: #f3c3bc;
   --color-warning: #8f5d07;
   --color-warning-subtle: #f8efdc;
+  --color-warning-border: #e8d9ab;
   --color-success: #146b43;
   --color-success-subtle: #e3f0e8;
+  --color-success-border: #c8e0d1;
+  --color-info: #0f5f8f;
+  --color-info-subtle: #e6eff6;
+  --color-info-border: #c6dcee;
 
   --color-dark-bg: #10231b;
   --color-dark-surface: #183329;
   --color-dark-border: #2b4a3d;
   --color-dark-text: #edf3ee;
   --color-dark-text-muted: #9db4a8;
+
+  /* Charts — categorical palette tuned for the paper/forest identity */
+  --chart-1: #0b5c40;
+  --chart-2: #b45f06;
+  --chart-3: #2e6f8e;
+  --chart-4: #7a5f9e;
+  --chart-5: #5d7a3a;
+  --chart-6: #b3462e;
+  --chart-7: #2a7a78;
+  --chart-8: #8a9089;
+  --chart-grid: #ebe8dd;
+  --chart-label: #565d55;
+
+  /* Tenant accent — JS overrides these per-organization (see useTenantAccent).
+     Defaults mirror the WymNet brand so unconfigured orgs look intentional. */
+  --tenant-accent: #0b5c40;
+  --tenant-accent-strong: #084630;
+  --tenant-accent-soft: #e2eee7;
+  --tenant-accent-text: #ffffff;
 
   /* Typography — serif display for editorial headings, sans for UI */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -41,6 +74,7 @@
 
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
+  --text-md: 0.9375rem;
   --text-base: 1rem;
   --text-lg: 1.125rem;
   --text-xl: 1.375rem;
@@ -73,13 +107,105 @@
   --shadow-xl: 0 32px 80px rgba(18, 24, 20, 0.18);
 
   /* Motion */
+  --dur-1: 120ms;
+  --dur-2: 200ms;
+  --dur-3: 320ms;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
   /* Layout */
   --container: 1160px;
   --container-narrow: 720px;
   --header-height: 68px;
 
+  /* Layering */
+  --z-sticky: 30;
+  --z-rail: 40;
+  --z-dropdown: 50;
+  --z-overlay: 60;
+  --z-modal: 70;
+  --z-toast: 80;
+  --z-palette: 90;
+  --z-tooltip: 100;
+
   /* Focus */
   --focus-ring: 0 0 0 3px rgba(11, 92, 64, 0.32);
+}
+
+/* --------------------------------------------------------------------------
+   Dark theme — deep forest graphite: near-black surfaces with a subtle green
+   cast, crisp borders, lifted accents for contrast.
+   Applied via <html data-theme="dark">; dashboard shell only.
+   -------------------------------------------------------------------------- */
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-bg: #0e1311;
+  --color-bg-subtle: #141a17;
+  --color-surface: #1a211d;
+  --color-surface-raised: #222b26;
+  --color-border: #2d3831;
+  --color-border-strong: #47544a;
+
+  --color-text: #e9ede9;
+  --color-text-muted: #a8b3aa;
+  --color-text-faint: #6f7a72;
+
+  --color-primary: #55c08f;
+  --color-primary-strong: #7fd7ae;
+  --color-primary-subtle: #1c3a2c;
+  --color-primary-text: #081410;
+
+  --color-accent: #e39c47;
+  --color-accent-subtle: #3a2a12;
+
+  --color-danger: #e87d6a;
+  --color-danger-subtle: #3d221d;
+  --color-danger-border: #683b32;
+  --color-warning: #e3af55;
+  --color-warning-subtle: #3a2d13;
+  --color-warning-border: #6b5626;
+  --color-success: #6bc694;
+  --color-success-subtle: #1c3a2c;
+  --color-success-border: #366350;
+  --color-info: #74b2e4;
+  --color-info-subtle: #1a2d3e;
+  --color-info-border: #335674;
+
+  --color-dark-bg: #080d0a;
+  --color-dark-surface: #131e17;
+  --color-dark-border: #25352b;
+  --color-dark-text: #e7efe9;
+  --color-dark-text-muted: #8da696;
+
+  --chart-1: #55c08f;
+  --chart-2: #e39c47;
+  --chart-3: #74b2e4;
+  --chart-4: #ab97d8;
+  --chart-5: #a2c374;
+  --chart-6: #e08069;
+  --chart-7: #64bcb8;
+  --chart-8: #6f7a72;
+  --chart-grid: #29332c;
+  --chart-label: #a8b3aa;
+
+  --tenant-accent: #55c08f;
+  --tenant-accent-strong: #7fd7ae;
+  --tenant-accent-soft: #1c3a2c;
+  --tenant-accent-text: #081410;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.55);
+  --shadow-xl: 0 32px 80px rgba(0, 0, 0, 0.65);
+
+  --focus-ring: 0 0 0 3px rgba(85, 192, 143, 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-1: 0ms;
+    --dur-2: 0ms;
+    --dur-3: 0ms;
+  }
 }

@@ -1,0 +1,26 @@
+/* Billing */
+.billing-grid {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+.billing-plan__name { font-size: 20px; font-weight: 700; }
+.billing-plan__price { font-size: 14px; color: var(--color-text-muted); margin: 4px 0 10px; }
+.billing-usage { display: flex; flex-direction: column; gap: 14px; }
+.usage-bar__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+.usage-bar__label { display: inline-flex; align-items: center; gap: 6px; font-size: var(--text-sm); font-weight: 550; }
+.usage-bar__num { font-size: var(--text-xs); color: var(--color-text-faint); font-variant-numeric: tabular-nums; }
+.usage-bar__track { height: 6px; border-radius: 99px; background: var(--color-bg-subtle); overflow: hidden; }
+.usage-bar__fill { height: 100%; border-radius: 99px; background: var(--tenant-accent); transition: width 0.4s var(--ease-out); }
+.usage-bar__fill.is-high { background: var(--color-warning); }
+.billing-plans { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--space-3); }
+.billing-plancard { padding: 16px; border: 1px solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-surface); }
+.billing-plancard.is-current { border-color: var(--tenant-accent); background: var(--tenant-accent-soft); }
+.billing-plancard__name { font-weight: 650; font-size: var(--text-md); }
+.billing-plancard__price { font-size: 22px; font-weight: 700; margin: 4px 0 10px; }
+.billing-plancard__price span { font-size: 12px; font-weight: 400; color: var(--color-text-faint); }
+.billing-plancard ul { margin: 0 0 12px; padding-left: 16px; font-size: var(--text-xs); color: var(--color-text-muted); display: flex; flex-direction: column; gap: 3px; }
+.billing-plancard__current { font-size: 11px; font-weight: 650; color: var(--tenant-accent); }
+.billing-plancard__cta { font-size: 11px; font-weight: 650; }
+@media (max-width: 900px) { .billing-grid { grid-template-columns: 1fr; } }

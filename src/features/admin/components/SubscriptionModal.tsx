@@ -3,6 +3,7 @@ import type { FormEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { adminApi } from '../api/admin-api';
 import { Button } from '../../../shared/components/Button';
+import { Select } from '../../../shared/components/Select';
 import { Alert } from '../../../shared/components/Alert';
 import { Modal } from '../../../shared/components/Modal';
 
@@ -15,7 +16,7 @@ export function SubscriptionModal({ open, onClose }: { open: boolean; onClose: (
   const queryClient = useQueryClient();
   const orgs = useQuery({
     queryKey: ['admin', 'orgs'],
-    queryFn: adminApi.listOrganizations,
+    queryFn: () => adminApi.listOrganizations(),
     enabled: open,
   });
   const products = useQuery({
@@ -61,6 +62,10 @@ export function SubscriptionModal({ open, onClose }: { open: boolean; onClose: (
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
+    if (!orgId) {
+      setError('Select an organization first.');
+      return;
+    }
     create.mutate();
   };
 
@@ -83,26 +88,18 @@ export function SubscriptionModal({ open, onClose }: { open: boolean; onClose: (
       <form id="subscription-form" onSubmit={submit}>
         {error && <Alert kind="error">{error}</Alert>}
 
-        <label className="field">
+        <div className="field">
           <span className="field__label">Organization</span>
-          <select
-            className="input"
+          <Select
             value={orgId}
-            onChange={(e) => setOrgId(e.target.value)}
-            required
+            onChange={setOrgId}
             disabled={orgs.isPending}
-          >
-            <option value="">
-              {orgs.isPending ? 'Loading organizations…' : 'Select an organization…'}
-            </option>
-            {(orgs.data ?? []).map((o) => (
-              <option key={o.id} value={o.id}>
-                {o.name}
-              </option>
-            ))}
-          </select>
+            placeholder={orgs.isPending ? 'Loading organizations…' : 'Select an organization…'}
+            ariaLabel="Organization"
+            options={(orgs.data ?? []).map((o) => ({ value: o.id, label: o.name }))}
+          />
           {orgs.isError && <span className="field__error">{orgs.error.message}</span>}
-        </label>
+        </div>
 
         <div className="field">
           <span className="field__label">Product</span>
@@ -122,16 +119,18 @@ export function SubscriptionModal({ open, onClose }: { open: boolean; onClose: (
         </div>
 
         <div className="form-grid">
-          <label className="field">
+          <div className="field">
             <span className="field__label">Initial status</span>
-            <select className="input" value={status} onChange={(e) => setStatus(e.target.value)}>
-              {STATUSES.map((s) => (
-                <option key={s} value={s}>
-                  {s.charAt(0).toUpperCase() + s.slice(1)}
-                </option>
-              ))}
-            </select>
-          </label>
+            <Select
+              value={status}
+              onChange={setStatus}
+              ariaLabel="Initial status"
+              options={STATUSES.map((s) => ({
+                value: s,
+                label: s.charAt(0).toUpperCase() + s.slice(1),
+              }))}
+            />
+          </div>
           <label className="field">
             <span className="field__label">Starts</span>
             <input

@@ -67,6 +67,30 @@ ul {
   border-radius: var(--radius-sm);
 }
 
+::selection {
+  background: var(--color-primary-subtle);
+  color: var(--color-text);
+}
+
+/* Quiet scrollbars that follow the theme */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong);
+  border-radius: 8px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 .container {
   max-width: var(--container);
   margin: 0 auto;
@@ -200,17 +224,22 @@ ul {
 .alert--error {
   background: var(--color-danger-subtle);
   color: var(--color-danger);
-  border-color: #f3c3bc;
+  border-color: var(--color-danger-border);
 }
 .alert--success {
   background: var(--color-success-subtle);
   color: var(--color-success);
-  border-color: #bfe6d0;
+  border-color: var(--color-success-border);
 }
 .alert--info {
-  background: var(--color-primary-subtle);
-  color: var(--color-primary-strong);
-  border-color: #ccd4f5;
+  background: var(--color-info-subtle);
+  color: var(--color-info);
+  border-color: var(--color-info-border);
+}
+.alert--warning {
+  background: var(--color-warning-subtle);
+  color: var(--color-warning);
+  border-color: var(--color-warning-border);
 }
 
 .badge {
@@ -238,6 +267,14 @@ ul {
 .badge--primary {
   background: var(--color-primary-subtle);
   color: var(--color-primary);
+}
+.badge--danger {
+  background: var(--color-danger-subtle);
+  color: var(--color-danger);
+}
+.badge--info {
+  background: var(--color-info-subtle);
+  color: var(--color-info);
 }
 
 /* States */

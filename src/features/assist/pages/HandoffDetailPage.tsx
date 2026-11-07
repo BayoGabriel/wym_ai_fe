@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { assistApi } from '../api/assist-api';
 import { assistKeys, assistQueries } from '../queries';
@@ -15,6 +15,7 @@ import { ReplyComposer } from '../components/ReplyComposer';
 
 export function HandoffDetailPage() {
   const { id = '' } = useParams();
+  const navigate = useNavigate();
   useDocumentTitle('Handoff');
   const canWrite = useCan('handoff.write');
   const queryClient = useQueryClient();
@@ -61,8 +62,17 @@ export function HandoffDetailPage() {
             )}
             {canWrite && active && (
               <>
-                <Button onClick={() => act.mutate(() => assistApi.resolveHandoff(h.id))}>
-                  Resolve
+                <Button
+                  onClick={() =>
+                    act.mutate(() => assistApi.resolveHandoff(h.id), {
+                      onSuccess: () =>
+                        navigate(
+                          `/dashboard/assist/knowledge?new=1&title=${encodeURIComponent(`How to handle: ${h.reason ?? 'customer enquiry'}`)}`
+                        ),
+                    })
+                  }
+                >
+                  Resolve &amp; teach
                 </Button>
                 <Button
                   variant="ghost"

@@ -1,65 +1,48 @@
-import { useEffect } from 'react';
 import type { ReactNode } from 'react';
-import { createPortal } from 'react-dom';
+import * as Dialog from '@radix-ui/react-dialog';
+import { X } from 'lucide-react';
+import './Modal.css';
 
 export function Modal({
   open,
   title,
+  description,
   onClose,
   children,
   footer,
   wide,
 }: {
   open: boolean;
-  title: string;
+  title: ReactNode;
+  description?: ReactNode;
   onClose: () => void;
   children: ReactNode;
   footer?: ReactNode;
   wide?: boolean;
 }) {
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [open, onClose]);
-
-  useEffect(() => {
-    if (!open) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, [open]);
-
-  if (!open) return null;
-
-  return createPortal(
-    <div
-      className="modal-scrim"
-      onMouseDown={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
-      <div
-        className={`modal${wide ? ' modal--wide' : ''}`}
-        role="dialog"
-        aria-modal="true"
-        aria-label={title}
-      >
-        <div className="modal-head">
-          <h2>{title}</h2>
-          <button type="button" className="modal-close" onClick={onClose} aria-label="Close">
-            ×
-          </button>
-        </div>
-        <div className="modal-body">{children}</div>
-        {footer && <div className="modal-foot">{footer}</div>}
-      </div>
-    </div>,
-    document.body
+  return (
+    <Dialog.Root open={open} onOpenChange={(o) => !o && onClose()}>
+      <Dialog.Portal>
+        <Dialog.Overlay className="modal-scrim" />
+        <Dialog.Content
+          className={`modal${wide ? ' modal--wide' : ''}`}
+          aria-describedby={description ? undefined : undefined}
+        >
+          <div className="modal-head">
+            <div>
+              <Dialog.Title className="modal-title">{title}</Dialog.Title>
+              {description && (
+                <Dialog.Description className="modal-desc">{description}</Dialog.Description>
+              )}
+            </div>
+            <Dialog.Close className="modal-close" aria-label="Close">
+              <X size={16} />
+            </Dialog.Close>
+          </div>
+          <div className="modal-body">{children}</div>
+          {footer && <div className="modal-foot">{footer}</div>}
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }

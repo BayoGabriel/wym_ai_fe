@@ -1,13 +1,7 @@
-const VARIANTS: Record<string, string> = {
-  active: 'badge--active',
-  trialing: 'badge--primary',
-  pending: 'badge--warning',
-  suspended: 'badge--warning',
-  inactive: 'badge--muted',
-  archived: 'badge--muted',
-};
+import { toneForStatus } from './status-tone';
+import './StatusBadge.css';
 
-export function StatusBadge({ status }: { status: string }) {
-  const variant = VARIANTS[status.toLowerCase()] ?? 'badge--muted';
-  return <span className={`badge ${variant}`}>{status}</span>;
+export function StatusBadge({ status, label }: { status: string; label?: string }) {
+  const tone = toneForStatus(status);
+  return <span className={`stag stag--${tone}`}>{label ?? status}</span>;
 }

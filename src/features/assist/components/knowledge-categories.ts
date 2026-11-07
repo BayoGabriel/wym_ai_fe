@@ -1,0 +1,11 @@
+export const KNOWLEDGE_CATEGORIES = [
+  'GENERAL',
+  'FAQ',
+  'EVENTS',
+  'FEATURES',
+  'COMPANY_INFO',
+  'SERVICES',
+  'POLICIES',
+  'PRICING',
+  'PROCEDURES',
+] as const;

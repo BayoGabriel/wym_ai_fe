@@ -1,4 +1,5 @@
 import { useId, useState } from 'react';
+import { Select } from './Select';
 
 type Props = {
   label: string;
@@ -39,23 +40,19 @@ export function PresetSelectField({
 
   return (
     <div className="field">
-      <label className="field__label" htmlFor={autoId}>
+      <span className="field__label" id={autoId}>
         {label}
-      </label>
-      <select
-        id={autoId}
-        className="input"
+      </span>
+      <Select
         value={selectValue}
-        onChange={(e) => handleSelect(e.target.value)}
-      >
-        <option value="">Select…</option>
-        {options.map((o) => (
-          <option key={o} value={o}>
-            {o}
-          </option>
-        ))}
-        <option value={CUSTOM}>Custom…</option>
-      </select>
+        onChange={handleSelect}
+        ariaLabel={label}
+        placeholder="Select…"
+        options={[
+          ...options.map((o) => ({ value: o, label: o })),
+          { value: CUSTOM, label: 'Custom…' },
+        ]}
+      />
       {customMode && (
         <input
           className="input"

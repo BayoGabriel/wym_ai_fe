@@ -1,0 +1,22 @@
+.ui-chartcard__body {
+  margin-top: var(--space-3);
+  min-width: 0;
+}
+.ui-chartcard__loading {
+  margin-top: var(--space-3);
+}
+.ui-chartcard__empty {
+  display: grid;
+  place-items: center;
+}
+/* Recharts inherits theme via currentColor hooks */
+.ui-chartcard .recharts-cartesian-grid line {
+  stroke: var(--chart-grid);
+}
+.ui-chartcard .recharts-text {
+  fill: var(--chart-label);
+  font-size: 11px;
+}
+.ui-chartcard .recharts-tooltip-wrapper {
+  outline: none;
+}

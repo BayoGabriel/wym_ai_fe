@@ -1,0 +1,36 @@
+.ui-ring {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.ui-ring__track {
+  stroke: var(--color-border);
+}
+.ui-ring__bar {
+  stroke: var(--tenant-accent);
+  transition: stroke-dashoffset var(--dur-3) var(--ease-out);
+}
+.ui-ring__label {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+}
+.ui-ring__label strong {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.ui-ring__label small {
+  font-size: 9px;
+  color: var(--color-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ui-ring__bar {
+    transition: none;
+  }
+}

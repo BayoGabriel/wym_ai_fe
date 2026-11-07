@@ -2,15 +2,24 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { Button } from '../../../shared/components/Button';
 import { TextField } from '../../../shared/components/TextField';
+import { Select } from '../../../shared/components/Select';
 import { Alert } from '../../../shared/components/Alert';
 import { assistApi } from '../api/assist-api';
 
-const CATEGORIES = ['GENERAL', 'FAQ', 'EVENTS', 'FEATURES'];
+import { KNOWLEDGE_CATEGORIES } from './knowledge-categories';
 
-export function KnowledgeForm({ onCreated }: { onCreated: () => void }) {
-  const [title, setTitle] = useState('');
+export function KnowledgeForm({
+  onCreated,
+  initialTitle = '',
+  initialCategory = 'FAQ',
+}: {
+  onCreated: () => void;
+  initialTitle?: string;
+  initialCategory?: string;
+}) {
+  const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState('');
-  const [category, setCategory] = useState('GENERAL');
+  const [category, setCategory] = useState(initialCategory);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -35,16 +44,18 @@ export function KnowledgeForm({ onCreated }: { onCreated: () => void }) {
       <h2 className="section-title">Add knowledge</h2>
       {error && <Alert kind="error">{error}</Alert>}
       <TextField label="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
-      <label className="field">
+      <div className="field">
         <span className="field__label">Category</span>
-        <select className="input" value={category} onChange={(e) => setCategory(e.target.value)}>
-          {CATEGORIES.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
-      </label>
+        <Select
+          value={category}
+          onChange={setCategory}
+          ariaLabel="Category"
+          options={KNOWLEDGE_CATEGORIES.map((c) => ({
+            value: c,
+            label: c.replace(/_/g, ' '),
+          }))}
+        />
+      </div>
       <label className="field">
         <span className="field__label">Content</span>
         <textarea

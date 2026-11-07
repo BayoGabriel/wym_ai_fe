@@ -12,6 +12,8 @@ export type AuthUser = {
   roles: { id: string; name: string; scope: 'platform' | 'organization' }[];
   permissions: string[];
   platformAccess: boolean;
+  /** Set when a platform admin is viewing as this user (audited view-as). */
+  impersonatedBy?: string | null;
 };
 
 export type RegisterResponse = {

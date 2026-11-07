@@ -7,7 +7,6 @@ import { useDocumentTitle } from '../../../shared/utils/useDocumentTitle';
 import { useCan } from '../../../shared/auth/use-permission';
 import { StatusTag } from '../components/StatusTag';
 import { EmptyState } from '../../../shared/components/States';
-import { SetupChecklist } from '../../dashboard/components/SetupChecklist';
 
 function ago(iso: string) {
   const m = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
@@ -203,7 +202,6 @@ export function AssistHomePage() {
         subtitle="Your customer-facing assistant — what needs attention right now."
       />
       {canReport && <StatStrip />}
-      <SetupChecklist />
       {canOps ? (
         <div className="grid two">
           <HandoffQueue />

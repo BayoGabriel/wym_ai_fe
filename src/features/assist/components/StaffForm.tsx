@@ -6,6 +6,7 @@ import type { Role } from '../api/assist-api';
 import { assistKeys, assistQueries } from '../queries';
 import { Button } from '../../../shared/components/Button';
 import { TextField } from '../../../shared/components/TextField';
+import { Select } from '../../../shared/components/Select';
 import { Alert } from '../../../shared/components/Alert';
 
 export function StaffForm() {
@@ -56,20 +57,15 @@ export function StaffForm() {
           required
           minLength={8}
         />
-        <label className="field">
+        <div className="field">
           <span className="field__label">Role</span>
-          <select
-            className="input"
+          <Select
             value={form.roleName}
-            onChange={(e) => setForm({ ...form, roleName: e.target.value })}
-          >
-            {orgRoles.map((r) => (
-              <option key={r.id} value={r.name}>
-                {r.name}
-              </option>
-            ))}
-          </select>
-        </label>
+            onChange={(roleName) => setForm({ ...form, roleName })}
+            ariaLabel="Role"
+            options={orgRoles.map((r) => ({ value: r.name, label: r.name }))}
+          />
+        </div>
       </div>
       <Button type="submit" loading={create.isPending} style={{ marginTop: 'var(--space-3)' }}>
         Add member

@@ -1,10 +1,12 @@
 import { isRouteErrorResponse, Link, useRouteError } from 'react-router-dom';
 import { ButtonLink } from '../../shared/components/Button';
 import { useDocumentTitle } from '../../shared/utils/useDocumentTitle';
+import { useLightTheme } from '../../shared/prefs/prefs';
 
 export function RouteErrorPage() {
   const error = useRouteError();
   useDocumentTitle('Something went wrong');
+  useLightTheme();
 
   const title = isRouteErrorResponse(error)
     ? error.status === 404

@@ -1,0 +1,122 @@
+/* Assistant Studio */
+.studio-body {
+  margin-top: var(--space-4);
+}
+.studio-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.studio-widget {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: var(--space-4);
+  align-items: start;
+}
+.studio-intake {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.studio-taglist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.studio-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--text-xs);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+.studio-tag button {
+  border: none;
+  background: none;
+  color: var(--color-text-faint);
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  padding: 0;
+}
+.studio-taginput {
+  display: flex;
+  gap: 8px;
+}
+.studio-taginput .input {
+  flex: 1;
+}
+.studio-preview__site {
+  position: relative;
+  height: 300px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(160deg, var(--color-bg-subtle), var(--color-bg));
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+.studio-bubble {
+  position: absolute;
+  bottom: 16px;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  box-shadow: var(--shadow-lg);
+}
+.studio-bubble--right { right: 16px; }
+.studio-bubble--left { left: 16px; }
+.studio-bubble--compact { width: 40px; height: 40px; }
+.studio-panel {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 200px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border-top: 3px solid;
+}
+.studio-panel--light { background: #fff; }
+.studio-panel--dark { background: #17211c; }
+.studio-panel__head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  font-size: 11px;
+  font-weight: 650;
+  color: #fff;
+}
+.studio-panel__head img {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+.studio-panel__body {
+  padding: 10px;
+}
+.studio-panel__msg {
+  font-size: 11px;
+  line-height: 1.4;
+  padding: 7px 9px;
+  border-radius: 10px 10px 10px 2px;
+}
+.studio-panel--light .studio-panel__msg {
+  background: #f0f2f0;
+  color: #1d2b25;
+}
+.studio-panel--dark .studio-panel__msg {
+  background: #233129;
+  color: #e8efe9;
+}
+@media (max-width: 980px) {
+  .studio-widget {
+    grid-template-columns: 1fr;
+  }
+}

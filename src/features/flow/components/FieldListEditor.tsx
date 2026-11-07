@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { FlowField } from '../api';
 import { Button } from '../../../shared/components/Button';
 import { TextField } from '../../../shared/components/TextField';
+import { Select } from '../../../shared/components/Select';
 
 const TYPES: FlowField['type'][] = ['text', 'textarea', 'number', 'date', 'select', 'checkbox'];
 
@@ -92,20 +93,15 @@ export function FieldListEditor({
           onChange={(e) => setDraft({ ...draft, label: e.target.value })}
           placeholder="Invoice amount"
         />
-        <label className="field">
+        <div className="field">
           <span className="field__label">Type</span>
-          <select
-            className="input"
+          <Select
             value={draft.type}
-            onChange={(e) => setDraft({ ...draft, type: e.target.value as FlowField['type'] })}
-          >
-            {TYPES.map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
-            ))}
-          </select>
-        </label>
+            onChange={(t) => setDraft({ ...draft, type: t as FlowField['type'] })}
+            ariaLabel="Field type"
+            options={TYPES.map((t) => ({ value: t, label: t }))}
+          />
+        </div>
         {draft.type === 'select' && (
           <TextField
             label="Options (comma-separated)"

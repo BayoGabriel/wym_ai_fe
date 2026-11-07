@@ -12,6 +12,7 @@ import { useCan } from '../../../shared/auth/use-permission';
 import { useAuth } from '../../../app/providers/auth-context';
 import { StatusTag } from '../components/StatusTag';
 import { StaffForm } from '../components/StaffForm';
+import { Select } from '../../../shared/components/Select';
 
 function initials(name: string) {
   const parts = name.trim().split(/\s+/);
@@ -190,7 +191,10 @@ export function TeamPage() {
                                       {u.name}
                                       {isSelf && <span className="faint"> (you)</span>}
                                     </span>
-                                    <span className="t-sub">{u.email}</span>
+                                    <span className="t-sub">
+                                      {u.email}
+                                      {u.department && <span className="dept-tag">{u.department}</span>}
+                                    </span>
                                   </span>
                                 </div>
                               </td>
@@ -207,29 +211,42 @@ export function TeamPage() {
                                 <td>
                                   {!isSelf && (
                                     <div className="member-actions">
-                                      <select
-                                        className="role-select"
-                                        value={orgRole(u)}
+                                      <Select
+                                        size="sm"
+                                        value={orgRole(u) || '__none__'}
                                         disabled={busy}
-                                        aria-label={`Role for ${u.name}`}
-                                        onChange={(e) =>
+                                        ariaLabel={`Role for ${u.name}`}
+                                        onChange={(v) =>
                                           patch.mutate({
                                             id: u.id,
-                                            body: { roleName: e.target.value || null },
+                                            body: { roleName: v === '__none__' ? null : v },
                                           })
                                         }
-                                      >
-                                        <option value="">No role</option>
-                                        {assignableRoles.map((r) => (
-                                          <option key={r.id} value={r.name}>
-                                            {r.name}
-                                          </option>
-                                        ))}
-                                        {!assignableRoles.some((r) => r.name === orgRole(u)) &&
-                                          orgRole(u) && (
-                                            <option value={orgRole(u)}>{orgRole(u)}</option>
-                                          )}
-                                      </select>
+                                        options={[
+                                          { value: '__none__', label: 'No role' },
+                                          ...assignableRoles.map((r) => ({
+                                            value: r.name,
+                                            label: r.name,
+                                          })),
+                                          ...(!assignableRoles.some(
+                                            (r) => r.name === orgRole(u)
+                                          ) && orgRole(u)
+                                            ? [{ value: orgRole(u), label: orgRole(u) }]
+                                            : []),
+                                        ]}
+                                      />
+                                      <input
+                                        className="dept-input"
+                                        placeholder="Dept…"
+                                        defaultValue={u.department ?? ''}
+                                        aria-label={`Department for ${u.name}`}
+                                        disabled={busy}
+                                        onBlur={(e) => {
+                                          const v = e.target.value.trim() || null;
+                                          if (v !== (u.department ?? null))
+                                            patch.mutate({ id: u.id, body: { department: v } });
+                                        }}
+                                      />
                                       <button
                                         className="pill"
                                         disabled={busy}

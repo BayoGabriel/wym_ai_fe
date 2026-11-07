@@ -2,24 +2,52 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { assistApi } from '../api/assist-api';
 import type { IntakeField } from '../api/assist-api';
-import { assistKeys, assistQueries } from '../queries';
+import { assistKeys } from '../queries';
+import { adminApi, adminKeys } from '../../admin/api/admin-api';
 import { Button } from '../../../shared/components/Button';
+import { Select } from '../../../shared/components/Select';
 import { Alert } from '../../../shared/components/Alert';
 import { LoadingState } from '../../../shared/components/States';
 
-export function IntakeFieldsEditor() {
+const FIELD_TYPES: { value: IntakeField['type']; label: string }[] = [
+  { value: 'text', label: 'Text' },
+  { value: 'textarea', label: 'Textarea' },
+  { value: 'select', label: 'Select' },
+  { value: 'checkbox', label: 'Checkbox' },
+  { value: 'phone', label: 'Phone' },
+  { value: 'email', label: 'Email' },
+  { value: 'date', label: 'Date' },
+  { value: 'time', label: 'Time' },
+  { value: 'consent', label: 'Consent' },
+];
+
+export function IntakeFieldsEditor({ orgId }: { orgId?: string } = {}) {
   const queryClient = useQueryClient();
-  const query = useQuery(assistQueries.config);
+  const query = useQuery({
+    queryKey: orgId ? adminKeys.orgOverview(orgId) : assistKeys.config,
+    queryFn: async () =>
+      orgId
+        ? (await adminApi.getOrgOverview(orgId)).assistConfig
+        : assistApi.getAssistantConfig(),
+  });
   const [fields, setFields] = useState<IntakeField[] | null>(null);
   const [draft, setDraft] = useState<IntakeField>({ key: '', label: '', type: 'text' });
 
   const items = fields ?? query.data?.intakeFields ?? [];
 
   const save = useMutation({
-    mutationFn: (next: IntakeField[]) => assistApi.patchAssistantConfig({ intakeFields: next }),
+    mutationFn: (next: IntakeField[]) =>
+      orgId
+        ? adminApi.patchAssistConfig(orgId, { intakeFields: next })
+        : assistApi.patchAssistantConfig({ intakeFields: next }),
     onSuccess: () => {
       setFields(null);
-      void queryClient.invalidateQueries({ queryKey: assistKeys.config });
+      void queryClient.invalidateQueries({
+        queryKey: orgId ? adminKeys.orgOverview(orgId) : assistKeys.config,
+      });
+      if (orgId) {
+        void queryClient.invalidateQueries({ queryKey: adminKeys.orgAudit(orgId) });
+      }
     },
   });
 
@@ -78,15 +106,12 @@ export function IntakeFieldsEditor() {
           value={draft.label}
           onChange={(e) => setDraft({ ...draft, label: e.target.value })}
         />
-        <select
-          className="input"
+        <Select
           value={draft.type}
-          onChange={(e) => setDraft({ ...draft, type: e.target.value as IntakeField['type'] })}
-        >
-          <option value="text">Text</option>
-          <option value="select">Select</option>
-          <option value="checkbox">Checkbox</option>
-        </select>
+          onChange={(type) => setDraft({ ...draft, type: type as IntakeField['type'] })}
+          options={FIELD_TYPES}
+          ariaLabel="Field type"
+        />
         {draft.type === 'select' && (
           <input
             className="input"

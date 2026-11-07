@@ -32,6 +32,25 @@ export async function register(input: RegisterInput): Promise<RegisterResponse> 
   return res;
 }
 
+// Always resolves on success — the backend responds identically whether or
+// not the email is registered, so unknown addresses can't be probed.
+export async function requestPasswordReset(email: string): Promise<void> {
+  await apiRequest<{ ok: boolean }>('/api/v1/auth/forgot-password', {
+    method: 'POST',
+    body: { email },
+  });
+}
+
+export async function resetPassword(input: {
+  token: string;
+  password: string;
+}): Promise<void> {
+  await apiRequest<{ ok: boolean }>('/api/v1/auth/reset-password', {
+    method: 'POST',
+    body: input,
+  });
+}
+
 export function fetchCurrentUser(signal?: AbortSignal): Promise<AuthUser> {
   return authRequest<AuthUser>('/api/v1/auth/me', { signal });
 }

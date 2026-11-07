@@ -3,7 +3,8 @@ import type { FormEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { assistApi } from '../api/assist-api';
 import type { OrgSettings } from '../api/assist-api';
-import { assistKeys, assistQueries } from '../queries';
+import { assistKeys } from '../queries';
+import { adminApi, adminKeys } from '../../admin/api/admin-api';
 import { Button } from '../../../shared/components/Button';
 import { TextField } from '../../../shared/components/TextField';
 import { PresetSelectField } from '../../../shared/components/PresetSelectField';
@@ -11,19 +12,33 @@ import { BUSINESS_CATEGORY_OPTIONS } from '../data/presets';
 import { Alert } from '../../../shared/components/Alert';
 import { LoadingState } from '../../../shared/components/States';
 
-export function BrandingForm() {
-  const query = useQuery(assistQueries.settings);
+export function BrandingForm({ orgId }: { orgId?: string } = {}) {
+  const query = useQuery({
+    queryKey: orgId ? adminKeys.orgOverview(orgId) : assistKeys.settings,
+    queryFn: async () =>
+      orgId
+        ? (await adminApi.getOrgOverview(orgId)).settings
+        : assistApi.getOrgSettings(),
+  });
   if (query.isPending) return <LoadingState label="Loading settings…" />;
-  return <BrandingFormInner initial={query.data ?? {}} />;
+  return <BrandingFormInner initial={query.data ?? {}} orgId={orgId} />;
 }
 
-function BrandingFormInner({ initial }: { initial: OrgSettings }) {
+function BrandingFormInner({ initial, orgId }: { initial: OrgSettings; orgId?: string }) {
   const queryClient = useQueryClient();
   const [form, setForm] = useState<OrgSettings>(initial);
 
   const save = useMutation({
-    mutationFn: () => assistApi.patchOrgSettings(form),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: assistKeys.settings }),
+    mutationFn: () =>
+      orgId ? adminApi.patchOrgSettings(orgId, form) : assistApi.patchOrgSettings(form),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: orgId ? adminKeys.orgOverview(orgId) : assistKeys.settings,
+      });
+      if (orgId) {
+        void queryClient.invalidateQueries({ queryKey: adminKeys.orgAudit(orgId) });
+      }
+    },
   });
 
   const set = (key: keyof OrgSettings) => (e: { target: { value: string } }) =>

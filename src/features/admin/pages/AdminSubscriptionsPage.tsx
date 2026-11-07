@@ -1,8 +1,11 @@
-import { useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import { adminApi } from '../api/admin-api';
+import type { Subscription } from '../api/admin-api';
 import { PageHeader } from '../../../shared/components/PageHeader';
 import { Button } from '../../../shared/components/Button';
+import { Select } from '../../../shared/components/Select';
 import { Alert } from '../../../shared/components/Alert';
 import { LoadingState, ErrorState } from '../../../shared/components/States';
 import { useDocumentTitle } from '../../../shared/utils/useDocumentTitle';
@@ -10,12 +13,25 @@ import { StatusTag } from '../../assist/components/StatusTag';
 import { SubscriptionModal } from '../components/SubscriptionModal';
 
 const STATUSES = ['trialing', 'active', 'suspended', 'cancelled', 'expired'];
+const STATUS_OPTIONS = [
+  { value: 'all', label: 'All statuses' },
+  ...STATUSES.map((s) => ({ value: s, label: s.charAt(0).toUpperCase() + s.slice(1) })),
+];
+
+type OrgGroup = { orgId: string; name: string; subs: Subscription[] };
+
+function statusSummary(subs: Subscription[]) {
+  const counts = new Map<string, number>();
+  for (const s of subs) counts.set(s.status, (counts.get(s.status) ?? 0) + 1);
+  return [...counts.entries()].map(([s, n]) => `${n} ${s}`).join(' · ');
+}
 
 export function AdminSubscriptionsPage() {
   useDocumentTitle('Subscriptions');
   const queryClient = useQueryClient();
   const [modalOpen, setModalOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState('all');
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const subs = useQuery({
     queryKey: ['admin', 'subscriptions'],
     queryFn: adminApi.listSubscriptions,
@@ -37,11 +53,31 @@ export function AdminSubscriptionsPage() {
     };
   }, [subs.data]);
 
-  const filtered = useMemo(
-    () =>
-      (subs.data ?? []).filter((s) => statusFilter === 'all' || s.status === statusFilter),
-    [subs.data, statusFilter]
-  );
+  const groups = useMemo(() => {
+    const filtered = (subs.data ?? []).filter(
+      (s) => statusFilter === 'all' || s.status === statusFilter
+    );
+    const map = new Map<string, OrgGroup>();
+    for (const s of filtered) {
+      const g = map.get(s.organizationId);
+      if (g) g.subs.push(s);
+      else
+        map.set(s.organizationId, {
+          orgId: s.organizationId,
+          name: s.organizationName ?? 'Unknown org',
+          subs: [s],
+        });
+    }
+    return [...map.values()].sort((a, b) => a.name.localeCompare(b.name));
+  }, [subs.data, statusFilter]);
+
+  const toggle = (orgId: string) =>
+    setCollapsed((prev) => {
+      const next = new Set(prev);
+      if (next.has(orgId)) next.delete(orgId);
+      else next.add(orgId);
+      return next;
+    });
 
   return (
     <>
@@ -77,26 +113,18 @@ export function AdminSubscriptionsPage() {
           <section className="card card--pad0">
             <div className="card-head" style={{ padding: 'var(--space-3) var(--space-4) 0' }}>
               <h2>All subscriptions</h2>
-              <select
-                className="input status-filter"
+              <Select
                 value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                aria-label="Filter by status"
-              >
-                <option value="all">All statuses</option>
-                {STATUSES.map((s) => (
-                  <option key={s} value={s}>
-                    {s.charAt(0).toUpperCase() + s.slice(1)}
-                  </option>
-                ))}
-              </select>
+                onChange={setStatusFilter}
+                options={STATUS_OPTIONS}
+                ariaLabel="Filter by status"
+              />
             </div>
             <div className="table-wrap">
               <table className="ops-table">
                 <thead>
                   <tr>
-                    <th>Organization</th>
-                    <th>Product</th>
+                    <th>Organization / product</th>
                     <th>Status</th>
                     <th>Started</th>
                     <th>Ends</th>
@@ -104,44 +132,73 @@ export function AdminSubscriptionsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filtered.map((s) => (
-                    <tr key={s.id} style={{ cursor: 'default' }}>
-                      <td>
-                        <div className="t-title">{s.organizationName ?? 'Unknown org'}</div>
-                        <div className="t-sub mono">{s.organizationId.slice(0, 8)}…</div>
-                      </td>
-                      <td>
-                        <span className="mono">{s.productCode ?? '—'}</span>
-                      </td>
-                      <td>
-                        <StatusTag status={s.status.toUpperCase()} />
-                      </td>
-                      <td className="muted">{new Date(s.startAt).toLocaleDateString()}</td>
-                      <td className="muted">
-                        {s.endAt ? new Date(s.endAt).toLocaleDateString() : 'Open-ended'}
-                      </td>
-                      <td className="num">
-                        <select
-                          className="status-select"
-                          value={s.status}
-                          disabled={patch.isPending}
-                          onChange={(e) => patch.mutate({ id: s.id, status: e.target.value })}
-                          aria-label="Change subscription status"
+                  {groups.map((g) => {
+                    const isCollapsed = collapsed.has(g.orgId);
+                    return (
+                      <Fragment key={g.orgId}>
+                        <tr
+                          className="group-row"
+                          onClick={() => toggle(g.orgId)}
+                          aria-expanded={!isCollapsed}
                         >
-                          {STATUSES.map((x) => (
-                            <option key={x} value={x}>
-                              {x.charAt(0).toUpperCase() + x.slice(1)}
-                            </option>
+                          <td>
+                            <div className="t-title group-title">
+                              {isCollapsed ? (
+                                <ChevronRight size={14} />
+                              ) : (
+                                <ChevronDown size={14} />
+                              )}
+                              {g.name}
+                            </div>
+                            <div className="t-sub mono">
+                              {g.orgId.slice(0, 8)}… · {g.subs.length} subscription
+                              {g.subs.length === 1 ? '' : 's'}
+                            </div>
+                          </td>
+                          <td colSpan={4} className="muted">
+                            {statusSummary(g.subs)}
+                          </td>
+                        </tr>
+                        {!isCollapsed &&
+                          g.subs.map((s) => (
+                            <tr key={s.id} className="sub-row" style={{ cursor: 'default' }}>
+                              <td>
+                                <span className="mono sub-indent">{s.productCode ?? '—'}</span>
+                              </td>
+                              <td>
+                                <StatusTag status={s.status.toUpperCase()} />
+                              </td>
+                              <td className="muted">
+                                {new Date(s.startAt).toLocaleDateString()}
+                              </td>
+                              <td className="muted">
+                                {s.endAt
+                                  ? new Date(s.endAt).toLocaleDateString()
+                                  : 'Open-ended'}
+                              </td>
+                              <td className="num">
+                                <Select
+                                  size="sm"
+                                  value={s.status}
+                                  disabled={patch.isPending}
+                                  onChange={(status) => patch.mutate({ id: s.id, status })}
+                                  options={STATUS_OPTIONS.slice(1)}
+                                  ariaLabel="Change subscription status"
+                                />
+                              </td>
+                            </tr>
                           ))}
-                        </select>
-                      </td>
-                    </tr>
-                  ))}
-                  {filtered.length === 0 && (
+                      </Fragment>
+                    );
+                  })}
+                  {groups.length === 0 && (
                     <tr>
-                      <td colSpan={6}>
+                      <td colSpan={5}>
                         <div className="state-box">
-                          <h3>No subscriptions{statusFilter !== 'all' ? ` with status “${statusFilter}”` : ''}</h3>
+                          <h3>
+                            No subscriptions
+                            {statusFilter !== 'all' ? ` with status “${statusFilter}”` : ''}
+                          </h3>
                           <p>Create one to grant an organization product access.</p>
                           <Button onClick={() => setModalOpen(true)}>+ New subscription</Button>
                         </div>

@@ -1,0 +1,45 @@
+/* Handoff queue — wait-age + priority chips */
+.prio,
+.age {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+.age {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+}
+.prio {
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.age--fresh {
+  color: var(--color-success);
+}
+.age--soon {
+  color: var(--color-warning);
+}
+.age--urgent {
+  color: var(--color-danger);
+}
+.prio.age--fresh {
+  background: var(--color-success-subtle);
+}
+.prio.age--soon {
+  background: var(--color-warning-subtle);
+}
+.prio.age--urgent {
+  background: var(--color-danger-subtle);
+}
+.t-actions {
+  white-space: nowrap;
+  text-align: right;
+}
+.t-actions .pill {
+  margin-left: 4px;
+}

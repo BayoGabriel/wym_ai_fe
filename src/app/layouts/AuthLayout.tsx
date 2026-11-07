@@ -1,7 +1,9 @@
 import { Link, Outlet } from 'react-router-dom';
+import { useLightTheme } from '../../shared/prefs/prefs';
 import '../../features/marketing/styles/marketing.css';
 
 export function AuthLayout() {
+  useLightTheme();
   return (
     <div className="auth-shell">
       <div style={{ width: '100%', maxWidth: 460 }}>

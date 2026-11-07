@@ -5,6 +5,7 @@ import { flowApi } from '../api';
 import type { FlowDefinition } from '../api';
 import { Button } from '../../../shared/components/Button';
 import { TextField } from '../../../shared/components/TextField';
+import { Select } from '../../../shared/components/Select';
 import { Alert } from '../../../shared/components/Alert';
 
 // Renders a dynamic form from a workflow definition's field spec.
@@ -48,23 +49,18 @@ export function SubmissionForm({
     <form className="card" onSubmit={handle}>
       <h2 className="section-title">New submission</h2>
       {error && <Alert kind="error">{error}</Alert>}
-      <label className="field">
+      <div className="field">
         <span className="field__label">Workflow</span>
-        <select
-          className="input"
+        <Select
           value={definitionId}
-          onChange={(e) => {
-            setDefinitionId(e.target.value);
+          onChange={(v) => {
+            setDefinitionId(v);
             setValues({});
           }}
-        >
-          {active.map((d) => (
-            <option key={d.id} value={d.id}>
-              {d.name}
-            </option>
-          ))}
-        </select>
-      </label>
+          ariaLabel="Workflow"
+          options={active.map((d) => ({ value: d.id, label: d.name }))}
+        />
+      </div>
       <TextField label="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
       {definition?.fields.map((f) => {
         if (f.type === 'select') {
@@ -74,18 +70,15 @@ export function SubmissionForm({
                 {f.label}
                 {f.required ? ' *' : ''}
               </span>
-              <select
-                className="input"
-                value={String(values[f.key] ?? '')}
-                onChange={(e) => set(f.key, e.target.value)}
-              >
-                <option value="">—</option>
-                {f.options?.map((o) => (
-                  <option key={o} value={o}>
-                    {o}
-                  </option>
-                ))}
-              </select>
+              <Select
+                value={String(values[f.key] ?? '') || '__none__'}
+                onChange={(v) => set(f.key, v === '__none__' ? '' : v)}
+                ariaLabel={f.label}
+                options={[
+                  { value: '__none__', label: '—' },
+                  ...(f.options ?? []).map((o) => ({ value: o, label: o })),
+                ]}
+              />
             </label>
           );
         }

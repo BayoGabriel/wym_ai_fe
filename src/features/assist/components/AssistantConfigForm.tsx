@@ -3,7 +3,8 @@ import type { FormEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { assistApi } from '../api/assist-api';
 import type { AssistantConfig } from '../api/assist-api';
-import { assistKeys, assistQueries } from '../queries';
+import { assistKeys } from '../queries';
+import { adminApi, adminKeys } from '../../admin/api/admin-api';
 import { Button } from '../../../shared/components/Button';
 import { TextField } from '../../../shared/components/TextField';
 import { PresetSelectField } from '../../../shared/components/PresetSelectField';
@@ -21,27 +22,42 @@ const FLAGS: { key: keyof AssistantConfig; label: string }[] = [
   { key: 'notifyOnAppointment', label: 'Notify on appointment request' },
 ];
 
-export function AssistantConfigForm() {
-  const query = useQuery(assistQueries.config);
+export function AssistantConfigForm({ orgId }: { orgId?: string } = {}) {
+  const query = useQuery({
+    queryKey: orgId ? adminKeys.orgOverview(orgId) : assistKeys.config,
+    queryFn: async () =>
+      orgId
+        ? (await adminApi.getOrgOverview(orgId)).assistConfig
+        : assistApi.getAssistantConfig(),
+  });
   if (query.isPending) return <LoadingState label="Loading configuration…" />;
-  return <ConfigFormInner initial={query.data ?? {}} />;
+  return <ConfigFormInner initial={query.data ?? {}} orgId={orgId} />;
 }
 
-function ConfigFormInner({ initial }: { initial: AssistantConfig }) {
+function ConfigFormInner({ initial, orgId }: { initial: AssistantConfig; orgId?: string }) {
   const queryClient = useQueryClient();
   const [form, setForm] = useState<AssistantConfig>(initial);
   const [origins, setOrigins] = useState((initial.allowedOrigins ?? []).join('\n'));
 
   const save = useMutation({
-    mutationFn: () =>
-      assistApi.patchAssistantConfig({
+    mutationFn: () => {
+      const body = {
         ...form,
         allowedOrigins: origins
           .split('\n')
           .map((o) => o.trim())
           .filter(Boolean),
-      }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: assistKeys.config }),
+      };
+      return orgId ? adminApi.patchAssistConfig(orgId, body) : assistApi.patchAssistantConfig(body);
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: orgId ? adminKeys.orgOverview(orgId) : assistKeys.config,
+      });
+      if (orgId) {
+        void queryClient.invalidateQueries({ queryKey: adminKeys.orgAudit(orgId) });
+      }
+    },
   });
 
   return (
